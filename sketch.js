@@ -1,5 +1,5 @@
 //Variable declaration
-let pantalla = 4;
+let pantalla = 5;
 
 /* None is 0
 Selecting is 1
@@ -46,6 +46,7 @@ let level1MapType = [
 
 
 let sumBlocks = [];
+let completedBlocks = [];
 
 function preload() {
     nunito = loadFont('fonts/nunito-bold.ttf');
@@ -56,7 +57,14 @@ function preload() {
     tut = loadImage("images/tutblock.png");
     tutReady = loadImage("images/tutReady.png");
     tutReady1 = loadImage("images/tutReady1.png");
+    finalInst = loadImage("images/finalInst.png");
+    finalInst1 = loadImage("images/finalInst1.png");
     level1 = loadImage("images/level1.png");
+    level1big = loadImage("images/level1big.png");
+    level1big1 = loadImage("images/level1big1.png");
+    tutGif = loadImage("images/tutgif2.gif");
+
+
 }
 
 function setup() {
@@ -84,6 +92,9 @@ function draw() {
                 image(inst2, 0, 0);
             }
 
+            image(tutGif, 695, 132);
+
+
             break;
 
         case 2:
@@ -98,9 +109,35 @@ function draw() {
             }
             break;
         case 4:
-            image(level1, 0, 0);
-            drawMapLevel1(level1Map, pantalla);
+            image(finalInst, 0, 0);
+            if (124 < mouseX && mouseX < 124 + 205 && 530 < mouseY && mouseY < 530 + 48) {
+                image(finalInst1, 0, 0);
+            }
+
             break;
+
+        case 5:
+            image(level1, 0, 0);
+            
+
+            if (96 < mouseX && mouseX < 96 + 197 && 394 < mouseY && mouseY < 394 + 47) {
+                image(level1big, 0, 0);
+            }
+
+            if (96 < mouseX && mouseX < 96 + 197 && 463 < mouseY && mouseY < 463 + 47) {
+                image(level1big1, 0, 0);
+            }
+
+            drawMapLevel1(level1Map, pantalla);
+            suma = 0;
+            for (let i = 0; i < sumBlocks.length; i++) {
+                suma += sumBlocks[i].getNumber();
+            }
+            textSize(80);
+            textAlign(CENTER);
+            text(suma, 195, 350);
+            break;
+
 
     }
 
@@ -136,6 +173,8 @@ function mousePressed() {
                     resetMapTut(instMap);
                     sumBlocks.push(instMap[selectedI][selectedJ]);
                     console.log(sumBlocks);
+                    pselectedI = selectedI;
+                    pselectedJ = selectedJ;
                     gameMode = 1;
 
                 } else if (instMap[selectedI][selectedJ].getType() == 1 && gameMode == 1) {
@@ -153,15 +192,23 @@ function mousePressed() {
                         console.log(sumBlocks);
                         console.log(instMap[selectedI][selectedJ]);
                         instMap[selectedI][selectedJ].changeType(5);
+
+                        for (let i = 0; i < sumBlocks.length; i++) {
+                            completedBlocks.push(sumBlocks[i]);
+                        }
+
                         while (sumBlocks.length > 0) {
                             sumBlocks[sumBlocks.length - 1].changeColor(instMap[selectedI][selectedJ].getColor());
                             sumBlocks[sumBlocks.length - 1].changeType(5);
                             sumBlocks.pop();
                         }
+
+                        completedBlocks.push(instMap[selectedI][selectedJ]);
                         resetMapTut(instMap);
                         console.log(instMap);
-                    }else{
-                        resetMapTut(instMap); 
+                        console.log(completedBlocks);
+                    } else {
+                        resetMapTut(instMap);
                     }
                 } else if ((selectedI == 0 && selectedJ == 1) || (selectedI == 2 && selectedJ == 0)) {
                     gameMode = 0;
@@ -173,7 +220,6 @@ function mousePressed() {
                 gameMode = 0;
             }
 
-
             break;
 
         case 3:
@@ -182,8 +228,15 @@ function mousePressed() {
             }
             break;
         case 4:
+
+            if (124 < mouseX && mouseX < 124 + 205 && 530 < mouseY && mouseY < 530 + 48) {
+                pantalla = 5;
+            }
+            break;
+
+        case 5:
             console.log(level1Map);
-            if (387 < mouseX && mouseX < 387+506 && 138 < mouseY && mouseY < 138+506) {
+            if (387 < mouseX && mouseX < 387 + 506 && 138 < mouseY && mouseY < 138 + 506) {
 
                 selectedI = Math.floor((mouseY - 155) / 97);
                 selectedJ = Math.floor((mouseX - 403) / 97);
@@ -192,6 +245,8 @@ function mousePressed() {
 
                     resetMap1(level1Map);
                     sumBlocks.push(level1Map[selectedI][selectedJ]);
+                    pselectedI = selectedI;
+                    pselectedJ = selectedJ;
                     console.log(sumBlocks);
                     gameMode = 1;
 
@@ -209,28 +264,35 @@ function mousePressed() {
                     if (sum == level1Map[selectedI][selectedJ].getNumber()) {
                         console.log(sumBlocks);
                         console.log(level1Map[selectedI][selectedJ]);
+
                         level1Map[selectedI][selectedJ].changeType(5);
+                        for (let i = 0; i < sumBlocks.length; i++) {
+                            completedBlocks.push(sumBlocks[i]);
+                        }
+
                         while (sumBlocks.length > 0) {
                             sumBlocks[sumBlocks.length - 1].changeColor(level1Map[selectedI][selectedJ].getColor());
                             sumBlocks[sumBlocks.length - 1].changeType(5);
                             sumBlocks.pop();
                         }
+
+                        completedBlocks.push(level1Map[selectedI][selectedJ]);
+
                         resetMap1(level1Map);
                         console.log(level1Map);
-                    }else{
+                    } else {
                         resetMap1(level1Map);
                     }
-                } else if ((selectedI == 2 && selectedJ == 0) || (selectedI == 2 && selectedJ == 2)
-                || (selectedI == 3 && selectedJ == 2) || (selectedI == 3 && selectedJ == 4)) {
+                } else if ((selectedI == 2 && selectedJ == 0) || (selectedI == 2 && selectedJ == 2) ||
+                    (selectedI == 3 && selectedJ == 2) || (selectedI == 3 && selectedJ == 4)) {
                     gameMode = 0;
                     resetPathMap1(level1Map);
                 }
 
-            } else {
-                resetMap1Full(level1Map);
-                setupLevel1Map(level1Map);
-                gameMode = 0;
-            }
+            } 
+            
+            resetMap1Full(level1Map);
+            singleReset();
             break;
     }
 }
@@ -254,7 +316,7 @@ function createMap(m, t) {
 }
 
 
-//Tutorial
+//Tutorial all good!
 function drawMap(m, screen) {
 
     for (let i = 0; i < m.length; i++) {
@@ -282,61 +344,63 @@ function drawMap(m, screen) {
 
     if (gameMode == 1) {
         if (720 < mouseX && mouseX < 1128 && 157 < mouseY && mouseY < 565) {
+            let adj = false;
             selectedI = Math.floor((mouseY - 157) / 140);
             selectedJ = Math.floor((mouseX - 720) / 140);
-            //console.log("previous: "+ pselectedI, pselectedJ + " current: "+selectedI, selectedJ);
+            console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
             //console.log("current type: "+ instMap[selectedI][selectedJ].getType());
-            if (selectedI != pselectedI || selectedJ != pselectedJ) {
 
-                if (m[selectedI][selectedJ].getType() != 4) {
+            //Check if valid move adjacent and valid square
+            if ((selectedI >= 0 && selectedI < m.length - 1 && (m[selectedI + 1][selectedJ] == m[pselectedI][pselectedJ])) || (selectedI <= m.length - 1 && selectedI > 0 && (m[selectedI - 1][selectedJ] == m[pselectedI][pselectedJ])) ||
+                (selectedJ >= 0 && selectedJ < m.length - 1 && (m[selectedI][selectedJ + 1] == m[pselectedI][pselectedJ])) || (selectedJ <= m.length - 1 && selectedJ > 0 && (m[selectedI][selectedJ - 1] == m[pselectedI][pselectedJ]))) {
+                if (selectedI != pselectedI || selectedJ != pselectedJ) {
 
-                    if (m[selectedI][selectedJ].getType() == 2) {
-                        pselectedI = selectedI;
-                        pselectedJ = selectedJ;
-                        m[selectedI][selectedJ].increaseSize(screen);
-                        m[selectedI][selectedJ].changeColor("#D8A0FF");
-                        m[selectedI][selectedJ].changeType(4);
-                        sumBlocks.push(m[selectedI][selectedJ]);
-                        console.log(sumBlocks);
-                    }
+                    if (m[selectedI][selectedJ].getType() != 4) {
 
-                    if (m[selectedI][selectedJ].getType() == 1) {
-                        if (sumBlocks[0] == m[selectedI][selectedJ]) {
+                        if (m[selectedI][selectedJ].getType() == 2) {
+                            pselectedI = selectedI;
+                            pselectedJ = selectedJ;
+                            m[selectedI][selectedJ].increaseSize(screen);
+                            m[selectedI][selectedJ].changeColor("#D8A0FF");
+                            m[selectedI][selectedJ].changeType(4);
+                            sumBlocks.push(m[selectedI][selectedJ]);
+                            console.log(sumBlocks);
+                        }
+
+                        if (m[selectedI][selectedJ].getType() == 1) {
+                            //0 reset
+                            if (sumBlocks[0] == m[selectedI][selectedJ]) {
+                                sumBlocks[sumBlocks.length - 1].changeType(2);
+                                sumBlocks.pop();
+                            }
+
+                        }
+
+
+                    } else if (m[pselectedI][pselectedJ].getType() == 4) {
+                        //reset to go back
+                        console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
+                        while (sumBlocks[sumBlocks.length - 1] != m[selectedI][selectedJ]) {
                             sumBlocks[sumBlocks.length - 1].changeType(2);
                             sumBlocks.pop();
                         }
-
+                        console.log(sumBlocks);
+                        pselectedI = selectedI;
+                        pselectedJ = selectedJ;
                     }
 
 
-                } else if (m[pselectedI][pselectedJ].getType() == 4) {
-                    //reset to go back
-                    console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
-                    while (sumBlocks[sumBlocks.length - 1] != m[selectedI][selectedJ]) {
-                        sumBlocks[sumBlocks.length - 1].changeType(2);
-                        sumBlocks.pop();
-                    }
-                    console.log(sumBlocks);
-                    pselectedI = selectedI;
-                    pselectedJ = selectedJ;
+
                 }
 
 
-
             }
-            /*else{
-                            if( m[selectedI][selectedJ].getType()==4){
-                                pselectedI=selectedI;
-                                pselectedJ=selectedJ;
-                                m[pselectedI][pselectedJ].changeType(2);
-                            }
-                        }*/
-
 
         }
     }
 
     if (checkWin(m)) {
+        resetMap1Full(level1Map);
         pantalla++;
     }
 
@@ -447,52 +511,52 @@ function drawMapLevel1(m, screen) {
             selectedJ = Math.floor((mouseX - 403) / 97);
             //console.log("previous: "+ pselectedI, pselectedJ + " current: "+selectedI, selectedJ);
             //console.log("current type: "+ level1Map[selectedI][selectedJ].getType());
-            if (selectedI != pselectedI || selectedJ != pselectedJ) {
-                console.log("previous: "+ pselectedI, pselectedJ + " current: "+selectedI, selectedJ);
-                console.log("current type: "+ level1Map[selectedI][selectedJ].getType());
-                if (m[selectedI][selectedJ].getType() != 4) {
 
-                    if (m[selectedI][selectedJ].getType() == 2) {
-                        pselectedI = selectedI;
-                        pselectedJ = selectedJ;
-                        m[selectedI][selectedJ].increaseSize(screen);
-                        m[selectedI][selectedJ].changeColor("#D8A0FF");
-                        m[selectedI][selectedJ].changeType(4);
-                        sumBlocks.push(m[selectedI][selectedJ]);
-                        console.log(sumBlocks);
-                    }
+            if ((selectedI >= 0 && selectedI < m.length - 1 && (m[selectedI + 1][selectedJ] == m[pselectedI][pselectedJ])) || (selectedI <= m.length - 1 && selectedI > 0 && (m[selectedI - 1][selectedJ] == m[pselectedI][pselectedJ])) ||
+                (selectedJ >= 0 && selectedJ < m.length - 1 && (m[selectedI][selectedJ + 1] == m[pselectedI][pselectedJ])) || (selectedJ <= m.length - 1 && selectedJ > 0 && (m[selectedI][selectedJ - 1] == m[pselectedI][pselectedJ]))) {
 
-                    if (m[selectedI][selectedJ].getType() == 1) {
-                        if (sumBlocks[0] == m[selectedI][selectedJ]) {
+                if (selectedI != pselectedI || selectedJ != pselectedJ) {
+                    console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
+                    console.log("current type: " + level1Map[selectedI][selectedJ].getType());
+                    if (m[selectedI][selectedJ].getType() != 4) {
+
+                        if (m[selectedI][selectedJ].getType() == 2) {
+                            pselectedI = selectedI;
+                            pselectedJ = selectedJ;
+                            m[selectedI][selectedJ].increaseSize(screen);
+                            m[selectedI][selectedJ].changeColor("#D8A0FF");
+                            m[selectedI][selectedJ].changeType(4);
+                            sumBlocks.push(m[selectedI][selectedJ]);
+                            console.log(sumBlocks);
+                        }
+
+                        if (m[selectedI][selectedJ].getType() == 1) {
+                            if (sumBlocks[0] == m[selectedI][selectedJ]) {
+                                sumBlocks[sumBlocks.length - 1].changeType(2);
+                                sumBlocks.pop();
+                            }
+
+                        }
+
+
+                    } else if (m[pselectedI][pselectedJ].getType() == 4) {
+                        //reset to go back
+                        console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
+                        while (sumBlocks[sumBlocks.length - 1] != m[selectedI][selectedJ]) {
                             sumBlocks[sumBlocks.length - 1].changeType(2);
                             sumBlocks.pop();
                         }
-
+                        console.log(sumBlocks);
+                        pselectedI = selectedI;
+                        pselectedJ = selectedJ;
                     }
 
 
-                } else if (m[pselectedI][pselectedJ].getType() == 4) {
-                    //reset to go back
-                    console.log("previous: " + pselectedI, pselectedJ + " current: " + selectedI, selectedJ);
-                    while (sumBlocks[sumBlocks.length - 1] != m[selectedI][selectedJ]) {
-                        sumBlocks[sumBlocks.length - 1].changeType(2);
-                        sumBlocks.pop();
-                    }
-                    console.log(sumBlocks);
-                    pselectedI = selectedI;
-                    pselectedJ = selectedJ;
+
                 }
 
-
-
             }
-            /*else{
-                            if( m[selectedI][selectedJ].getType()==4){
-                                pselectedI=selectedI;
-                                pselectedJ=selectedJ;
-                                m[pselectedI][pselectedJ].changeType(2);
-                            }
-                        }*/
+
 
 
         }
@@ -503,7 +567,7 @@ function drawMapLevel1(m, screen) {
     }
 
 }
- 
+
 
 function resetMap1(m) {
     gameMode = 0
@@ -537,49 +601,53 @@ function resetMap1(m) {
 
 
 function resetMap1Full(m) {
-    gameMode = 0
-    /*selectedI = 0;
-    selectedJ = 0;
-
-    pselectedI = 0;
-    pselectedJ = 0;*/
-    sumBlocks = [];
-    for (let i = 0; i < m.length; i++) {
-        for (let j = 0; j < m[i].length; j++) {
-            if (m[i][j].getType() == 4 || m[i][j].getType() == 5) {
-                m[i][j].changeType(2);
+    if (96 < mouseX && mouseX < 96 + 197 && 463 < mouseY && mouseY < 463 + 47) {
+        gameMode = 0
+        /*selectedI = 0;
+        selectedJ = 0;
+    
+        pselectedI = 0;
+        pselectedJ = 0;*/
+        sumBlocks = [];
+        completedBlocks = [];
+        for (let i = 0; i < m.length; i++) {
+            for (let j = 0; j < m[i].length; j++) {
+                if (m[i][j].getType() == 4 || m[i][j].getType() == 5) {
+                    m[i][j].changeType(2);
+                }
             }
         }
-    }
 
-    if (m[2][0].getType() != 1) {
-        m[2][0].changeColor("#D8A0FF");
-        m[2][0].changeType(1);
-    }
-    if (m[2][2].getType() != 1) {
-        m[2][2].changeColor("#D8A0FF");
-        m[2][2].changeType(1);
-    }
-    if (m[3][2].getType() != 1) {
-        m[3][2].changeColor("#D8A0FF");
-        m[3][2].changeType(1);
-    }
-    if (m[3][4].getType() != 1) {
-        m[3][4].changeColor("#D8A0FF");
-        m[3][4].changeType(1);
-    }
+        if (m[2][0].getType() != 1) {
+            m[2][0].changeColor("#D8A0FF");
+            m[2][0].changeType(1);
+        }
+        if (m[2][2].getType() != 1) {
+            m[2][2].changeColor("#D8A0FF");
+            m[2][2].changeType(1);
+        }
+        if (m[3][2].getType() != 1) {
+            m[3][2].changeColor("#D8A0FF");
+            m[3][2].changeType(1);
+        }
+        if (m[3][4].getType() != 1) {
+            m[3][4].changeColor("#D8A0FF");
+            m[3][4].changeType(1);
+        }
 
-    if (m[0][0].getType() != 3) {
-        m[0][0].changeType(3);
-    }
-    if (m[3][0].getType() != 3) {
-        m[2][0].changeType(3);
-    }
-    if (m[4][0].getType() != 3) {
-        m[4][0].changeType(3);
-    }
-    if (m[4][4].getType() != 3) {
-        m[4][4].changeType(3);
+        if (m[0][0].getType() != 3) {
+            m[0][0].changeType(3);
+        }
+        if (m[3][0].getType() != 3) {
+            m[3][0].changeType(3);
+        }
+        if (m[4][0].getType() != 3) {
+            m[4][0].changeType(3);
+        }
+        if (m[4][4].getType() != 3) {
+            m[4][4].changeType(3);
+        }
+        setupLevel1Map(level1Map);
     }
 }
 
@@ -602,6 +670,25 @@ function resetPathMap1(m) {
     }
     if (m[3][4].getType() != 1 && m[3][4].getType() != 5) {
         m[3][4].changeType(1);
+    }
+}
+
+
+function singleReset() {
+    if (completedBlocks.length > 0) {
+        if (96 < mouseX && mouseX < 96 + 197 && 394 < mouseY && mouseY < 394 + 47) {
+            completedBlocks[completedBlocks.length - 1].changeType(3);
+            completedBlocks.pop();
+            while (completedBlocks[completedBlocks.length - 1].getNumber() != 0) {
+                completedBlocks[completedBlocks.length - 1].changeType(2);
+                completedBlocks.pop();
+                console.log(completedBlocks);
+            }
+            completedBlocks[completedBlocks.length - 1].changeType(1);
+            completedBlocks[completedBlocks.length - 1].changeColor("#D8A0FF");
+            completedBlocks.pop();
+        }
+        console.log(completedBlocks);
     }
 }
 
