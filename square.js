@@ -42,6 +42,14 @@ class Square {
             }
         }
 
+        if(map==7){
+            if (this.posx-34 < mouseX && mouseX < this.posx-34+this.size && this.posy-34 < mouseY && mouseY < this.posy-34+this.size) {
+                this.size=57;
+            }else{
+                this.size=50;
+            }
+        }
+
     }
 
     drawSquare(map) {
@@ -108,6 +116,26 @@ class Square {
 
             textSize(this.size / 2);
             text(this.number, this.posx , this.posy + 13); 
+        }
+
+        if(map==7){
+            rectMode(CENTER);
+            //Color
+            fill(this.color);
+            noStroke();
+            square(this.posx, this.posy, this.size, this.round);
+
+            //Text
+            fill(255);
+            textFont(nunito);
+            
+
+            if (this.number == 0) {
+                fill("#483B51");
+            }
+
+            textSize(this.size / 2);
+            text(this.number, this.posx , this.posy + 10); 
         }
 
 
