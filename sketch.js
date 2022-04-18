@@ -1,3 +1,7 @@
+let NameCarrera = "Ingeniería de Sistemas";
+let path = "";
+let actividad;
+
 //Variable declaration
 let pantalla = 0;
 
@@ -112,29 +116,28 @@ let scoreTimes = [];
 
 
 function preload() {
-    nunito = loadFont('fonts/nunito-bold.ttf');
-    home1 = loadImage("images/start1.png");
-    home2 = loadImage("images/start2.png");
-    inst1 = loadImage("images/inst1.png");
-    inst2 = loadImage("images/inst2.png");
-    tut = loadImage("images/tutblock.png");
-    tutReady = loadImage("images/tutReady.png");
-    tutReady1 = loadImage("images/tutReady1.png");
-    finalInst = loadImage("images/finalInst.png");
-    finalInst1 = loadImage("images/finalInst1.png");
-    level1 = loadImage("images/level1.png");
-    level1big = loadImage("images/level1big.png");
-    level1big1 = loadImage("images/level1big1.png");
-    level2 = loadImage("images/level2.png");
-    level2bg = loadImage("images/level2bg.png");
-    level2bg1 = loadImage("images/level2bg1.png");
-    level3 = loadImage("images/level3.png");
-    level3bg = loadImage("images/level3bg.png");
-    level3bg1 = loadImage("images/level3bg1.png");
-    score = loadImage("images/Score.png");
-    score1 = loadImage("images/Score1.png");
-
-    tutGif = loadImage("images/tutgif2.gif");
+    nunito = loadFont(path+'fonts/nunito-bold.ttf');
+    home1 = loadImage(path+"images/start1.png");
+    home2 = loadImage(path+"images/start2.png");
+    inst1 = loadImage(path+"images/inst1.png");
+    inst2 = loadImage(path+"images/inst2.png");
+    tut = loadImage(path+"images/tutblock.png");
+    tutReady = loadImage(path+"images/tutReady.png");
+    tutReady1 = loadImage(path+"images/tutReady1.png");
+    finalInst = loadImage(path+"images/finalInst.png");
+    finalInst1 = loadImage(path+"images/finalInst1.png");
+    level1 = loadImage(path+"images/level1.png");
+    level1big = loadImage(path+"images/level1big.png");
+    level1big1 = loadImage(path+"images/level1big1.png");
+    level2 = loadImage(path+"images/level2.png");
+    level2bg = loadImage(path+"images/level2bg.png");
+    level2bg1 = loadImage(path+"images/level2bg1.png");
+    level3 = loadImage(path+"images/level3.png");
+    level3bg = loadImage(path+"images/level3bg.png");
+    level3bg1 = loadImage(path+"images/level3bg1.png");
+    score = loadImage(path+"images/Score.png");
+    score1 = loadImage(path+"images/Score1.png");
+    tutGif = loadImage(path+"images/tutgif2.gif");
 }
 
 function setup() {
@@ -327,9 +330,9 @@ function draw() {
             break;
     }
 
-    textSize(16);
+    /*textSize(16);
     fill(255);
-    text(mouseX + "," + mouseY, mouseX, mouseY);
+    text(mouseX + "," + mouseY, mouseX, mouseY);*/
 
 
 }
@@ -601,6 +604,16 @@ function mousePressed() {
 
             resetMap3Full(level3Map);
             singleReset();
+            break;
+        case 8:
+            if (528 < mouseX && mouseX < 528 + 225 && 605 < mouseY && mouseY < 605 + 53) {
+                console.log("Finish");
+                actividad.addResult([{id:NameCarrera1, value:scoreTimes[0]}]);
+                actividad.addResult([{id:NameCarrera1, value:scoreTimes[1]}]);
+                actividad.addResult([{id:NameCarrera1, value:scoreTimes[2]}]);
+                actividad.addResult([{id:NameCarrera1, value:scoreTimes[0]+scoreTimes[1]+scoreTimes[2]}]);
+                actividad.finish(); 
+            }
             break;
 
 
