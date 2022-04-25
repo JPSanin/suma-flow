@@ -114,6 +114,9 @@ let completedBlocks = [];
 
 let scoreTimes = [];
 
+//Timer limit
+let timerLim = 0;
+
 
 function preload() {
     nunito = loadFont(path+'fonts/nunito-bold.ttf');
@@ -197,6 +200,7 @@ function draw() {
             image(level1, 0, 0);
             timer2 = floor(millis() / 1000);
             timerdif = floor(millis() / 1000) - timer1;
+            timerLim = floor(millis() / 1000) - timer1;
             timerShow = timerdif - 60 * min;
             if (timerShow < 10) {
                 timerShow = "0" + timerShow;
@@ -236,6 +240,7 @@ function draw() {
             image(level2, 0, 0);
             timer3 = floor(millis() / 1000)
             timerdif1 = floor(millis() / 1000) - timer2;
+            timerLim = floor(millis() / 1000) - timer1;
             timerShow1 = timerdif1 - 60 * min1;
             if (timerShow1 < 10) {
                 timerShow1 = "0" + timerShow1;
@@ -276,6 +281,7 @@ function draw() {
             image(level3, 0, 0);
 
             timerdif2 = floor(millis() / 1000) - timer3;
+            timerLim = floor(millis() / 1000) - timer1;
             timerShow2 = timerdif2 - 60 * min2;
             if (timerShow2 < 10) {
                 timerShow2 = "0" + timerShow2;
@@ -330,6 +336,30 @@ function draw() {
             break;
     }
 
+    // Passes 6 minutes game ends
+    if(timerLim>360){
+       
+        if(scoreTimes.length==0){
+            scoreTimes.push(0);
+            scoreTimes.push(0);
+            scoreTimes.push(0);
+        }
+
+        if(scoreTimes.length==1){
+            scoreTimes.push(0);
+            scoreTimes.push(0);
+        }
+
+        if(scoreTimes.length==2){
+            scoreTimes.push(0);
+        }
+
+        calculateScore(scoreTimes);
+        pantalla=8;
+  
+
+    }
+    
     /*textSize(16);
     fill(255);
     text(mouseX + "," + mouseY, mouseX, mouseY);*/
@@ -1519,15 +1549,22 @@ function calculateScore(m) {
     let score2 = 60;
     let score3 = 100;
 
-    if (m[0] < 60) {
-        score1 = 40;
-    } else {
-        while (m[0] > 60 && score1 > 0) {
-            score1 -= 10;
-            m[0] = m[0] - 30;
+    if(m[0]==0){
+        score1=0;
+    }else{
+        if (m[0] < 60) {
+            score1 = 40;
+        } else {
+            while (m[0] > 60 && score1 > 0) {
+                score1 -= 10;
+                m[0] = m[0] - 30;
+            }
         }
     }
-
+  
+    if(m[1]==0){
+        score2=0;
+    }else{
     if (m[1] < 90) {
         score2 = 60;
     } else {
@@ -1536,18 +1573,27 @@ function calculateScore(m) {
             m[1] = m[1] - 15;
         }
     }
+    }
 
-    if (m[2] < 150) {
-        score3 = 100;
-    } else {
-        while (m[2] > 150 && score3 > 0) {
-            score3 -= 5;
-            m[2] = m[2] - 10;
+    if(m[2]==0){
+        score3=0;
+    }else{
+        if (m[2] < 150) {
+            score3 = 100;
+        } else {
+            while (m[2] > 150 && score3 > 0) {
+                score3 -= 5;
+                m[2] = m[2] - 10;
+            }
         }
     }
+
+   
 
     m[0] = score1;
     m[1] = score2;
     m[2] = score3;
+
+    
 
 }
